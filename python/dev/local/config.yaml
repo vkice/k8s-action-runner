@@ -1,0 +1,23 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: k8s-action-runner
+servers: 1 # Control+Data plane
+agents: 1 # Data plane
+image: rancher/k3s
+# volumes: # Optional local files, for Macs with a /var/mnt location
+#   - volume: /var/mnt:/mnt
+#     nodeFilters:
+#     - agent:*
+options:
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
+  k3d:
+    wait: true
+    timeout: "30s"
+  k3s:
+    nodeLabels:
+      - label: workerNode=true
+        nodeFilters:
+          - agent:*

@@ -1,0 +1,9 @@
+[project]
+name = "k8s-action-runner"
+version = "0.1.0"
+description = "Python module leveraging the Asyncio Kubernetes Client API to automate Kubernetes tasks triggered by GitHub Actions. It's designed to run within a self-hosted GitHub runner managed by Actions Runner Controller (ARC) inside your Kubernetes cluster"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "kubernetes-asyncio>=31.1.0",
+]

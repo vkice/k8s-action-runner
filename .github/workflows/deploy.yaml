@@ -1,0 +1,42 @@
+name: "K8s Action Runner"
+
+on:
+  pull_request:
+    branches:
+      - example
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+      - labeled
+      - unlabeled
+
+env:
+  PYTHONUNBUFFERED: 1 # Force stdout to be unbuffered
+  NAME_APPEND: ${{ github.repository }}-${{ github.run_id }} # Generate a unique name for the run based on this repository and the run id
+
+jobs:
+  workflow-run:
+    runs-on:
+      group: my-self-hosted-runner-group
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python Package Manager (UV)
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "0.5.6"
+
+      - name: Install Python & Dependencies
+        run: |
+          cd python/
+          uv python install
+          uv sync --all-extras --frozen
+          mv .venv/ ../.venv/ # Move the virtual environment to the root directory, so it can ran at the root level
+
+      - name: Run Python Module
+        run: |
+          uv run --frozen --module python.main
